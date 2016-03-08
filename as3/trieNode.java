@@ -10,12 +10,40 @@
 
 public class trieNode{
 
-   public void trieNode{
+   private trieNode left;
+   private trieNode right;
+   private trieNode child;
+   private char data;
 
-
+   public void trieNode(char data){
+      left = null;
+      right = null;
+      child = null;
+      this.data = data;
    }
 
-   public void insert{}
-   public String search{}
+   public void insertRight(trieNode rightNew){
+      right = rightNew;
+   }
+
+   public void insertLeft(trieNode leftNew){
+      left = leftNew;
+   }
+
+   public void insertChild(trieNode childNew){
+      child = childNew;
+   }
+
+   public trie getRight(){
+      return right;
+   }
+
+   public trie getLeft(){
+      return left;
+   }
+
+   public trie getChild(){
+      return child;
+   }
 
 }

@@ -32,7 +32,7 @@ public class as3{
          fr.close();
 
          FileReader frs = new FileReader(spellCheck);
-         BufferedReader brs = new BufferedReader(fr);
+         BufferedReader brs = new BufferedReader(frs);
 
          String line = brs.readLine();
          while(line != null){
