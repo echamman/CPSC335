@@ -38,7 +38,7 @@ public class as3{
          line = brs.readLine();
          while(line != null){
             //Spell Check all items
-
+            tc.spellCheck(line);
             line = brs.readLine();
          }
 

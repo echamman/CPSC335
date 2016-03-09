@@ -1,9 +1,6 @@
 public class test{
 	public static void main(String [] args){
-		char c = '$';
-		if(c < 'a')
-			System.out.println("YEa");
-		else
-			System.out.println("NAw");
+		char test = '\'';
+		System.out.println(test);
 }
 }

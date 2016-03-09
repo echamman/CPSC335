@@ -12,6 +12,12 @@ public class trieController{
       root = null;
    }
 
+   /*
+   -------------------------------------------------------------------------------------------------------
+   INSERTION
+   -------------------------------------------------------------------------------------------------------
+   */
+   //Inserts a word into the trie
    public void insert(String word){
       trieNode head = null;        //Used to remember the node at the beginning of a word, depth 1
 
@@ -62,12 +68,10 @@ public class trieController{
 
       while(depth < word.length()){
 
-         if(spot.getChild()==null){                   //If there is no child, but still more word to add, loop through the rest of the word
-            for(int i=1; i<word.length(); i++){
-               spot.insertChild(new trieNode(word.charAt(depth), depth));
-               spot = spot.getChild();
-               depth++;
-            }
+         if(spot.getChild()==null){
+            spot.insertChild(new trieNode(word.charAt(depth), depth));
+            spot = spot.getChild();
+            depth++;
          }
          else{
             spot = insertChar(word.charAt(depth), spot, depth);
@@ -75,12 +79,16 @@ public class trieController{
          }
       }
 
-      insertChar('$', spot, depth);             //Insert '$' which symbolizes the end of a word
+       //Insert '$' which symbolizes the end of a word
+      if(spot.getChild()==null)
+         spot.insertChild(new trieNode('$', depth));
+      else
+         insertChar('$', spot, depth);
 
    }
 
    /*
-      Used to insert a character into the list of children under this parent node
+      Used to insert a character into the list of children under this parent node, only used when the child is NOT null
    */
    private trieNode insertChar(char data, trieNode parent, int depth){
 
@@ -97,9 +105,9 @@ public class trieController{
          //Insert new node into list
          sibling = new trieNode(data, depth);
          sibling.insertLeft(spot.getLeft());
-         sibling.insertLeft(sibling);
+         spot.insertLeft(sibling);
          sibling.insertRight(spot);
-         //If head is rightmost, it is root
+         //If new node is rightmost, it is direct child of parent
          if(sibling.getLeft() == null)
             parent.insertChild(sibling);
       }
@@ -112,4 +120,35 @@ public class trieController{
 
       return sibling;
    }
+
+   /*
+   -------------------------------------------------------------------------------------------------------
+   SPELLCHECKING
+   -------------------------------------------------------------------------------------------------------
+   */
+   public void spellCheck(String word){
+
+      String endWord = word+'$';        //Append the end word character
+      trieNode spot = root;
+      boolean found = false;
+
+      for(int i=0; i<endWord.length();i++){
+         while(spot.getData() < endWord.charAt(i) && spot.getRight()!=null)
+            spot = spot.getRight();
+
+         if(spot.getData()==endWord.charAt(i) && spot.getData()=='$'){
+            found=true;
+         }
+         else if(spot.getData()==endWord.charAt(i))
+            spot = spot.getChild();
+         else
+            break;
+      }
+
+      if(found==true)
+         System.out.println(word + " is correctly spelled");
+      else
+         System.out.println(word + " is incorrectly spelled");
+   }
+
 }
