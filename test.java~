@@ -1,6 +1,9 @@
 public class test{
 	public static void main(String [] args){
-		int[] test = new int[5];
-		System.out.println(int[0] + " " + int[4]);
+		char c = '$';
+		if(c < 'a')
+			System.out.println("YEa");
+		else
+			System.out.println("NAw");
 }
 }

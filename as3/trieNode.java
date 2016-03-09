@@ -14,12 +14,14 @@ public class trieNode{
    private trieNode right;
    private trieNode child;
    private char data;
+   private int depth;
 
-   public void trieNode(char data){
+   public trieNode(char data, int depth){
       left = null;
       right = null;
       child = null;
       this.data = data;
+      this.depth = depth;
    }
 
    public void insertRight(trieNode rightNew){
@@ -34,16 +36,24 @@ public class trieNode{
       child = childNew;
    }
 
-   public trie getRight(){
+   public trieNode getRight(){
       return right;
    }
 
-   public trie getLeft(){
+   public trieNode getLeft(){
       return left;
    }
 
-   public trie getChild(){
+   public trieNode getChild(){
       return child;
+   }
+
+   public char getData(){
+      return data;
+   }
+
+   public int getDepth(){
+      return depth;
    }
 
 }

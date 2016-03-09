@@ -16,6 +16,7 @@ public class as3{
 
       String dictionary = args[0];
       String spellCheck = args[1];
+      trieController tc = new trieController();
 
       try{
          FileReader fr = new FileReader(dictionary);
@@ -24,7 +25,7 @@ public class as3{
          String line = br.readLine();
          while(line != null){
             //Insert dictionary items
-
+            tc.insert(line);
             line = br.readLine();
          }
 
@@ -34,7 +35,7 @@ public class as3{
          FileReader frs = new FileReader(spellCheck);
          BufferedReader brs = new BufferedReader(frs);
 
-         String line = brs.readLine();
+         line = brs.readLine();
          while(line != null){
             //Spell Check all items
 
