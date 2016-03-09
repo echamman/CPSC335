@@ -19,7 +19,7 @@ public class trieController{
    */
    //Inserts a word into the trie
    public void insert(String word){
-      trieNode head = null;        //Used to remember the node at the beginning of a word, depth 1
+      trieNode head = null;        //Used to remember the node at the beginning of a word, depth 0
 
       if(root==null){
          root = new trieNode(word.charAt(0), 0);
@@ -63,7 +63,6 @@ public class trieController{
    private void insertWord(String word, trieNode head){
 
       trieNode spot = head;
-      trieNode parent = null;             //Used to maintain a parent, in the case of the ordered list of children has a new 'head'
       int depth = 1;
 
       while(depth < word.length()){
