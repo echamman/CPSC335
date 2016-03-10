@@ -25,7 +25,7 @@ public class as3{
          String line = br.readLine();
          while(line != null){
             //Insert dictionary items
-            tc.insert(line);
+            tc.insert(line.toLowerCase());
             line = br.readLine();
          }
 
@@ -39,8 +39,14 @@ public class as3{
          while(line != null){
             //Spell Check all items
             String[] words = line.split(" ");
+
+            //Removes special characters, essentially rendering each word as only the word, no spaces or characters
             for(String word : words){
-               tc.spellCheck(word);
+               word = word.replaceAll("[-.:;(),\"?]","");
+               word = word.replaceAll("!","");
+               word = word.toLowerCase();
+               if(!word.equals(""))
+                  tc.spellCheck(word);
             }
             line = brs.readLine();
          }
@@ -53,5 +59,7 @@ public class as3{
          System.out.println("IOException: "+e);
          System.exit(0);
       }
+
+      tc.printStats();
    }
 }

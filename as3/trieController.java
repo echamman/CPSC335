@@ -7,9 +7,23 @@
 public class trieController{
 
    private trieNode root;        //Topmost Rightmost Node in the trie
+   private int averageDepth;     //Used to find the averages for spellchecking
+   private long avgTimeFound;
+   private long avgTimeNotFound;
+   private int foundCount;
+   private int notFoundCount;
+   private float avgDepth;
+   private int timesChecked;
 
    public trieController(){
       root = null;
+      averageDepth = 0;
+      avgTimeFound = 0;
+      avgTimeNotFound = 0;
+      foundCount = 0;
+      notFoundCount = 0;
+      avgDepth = 0;
+      timesChecked = 0;
    }
 
    /*
@@ -21,6 +35,7 @@ public class trieController{
    public void insert(String word){
       trieNode head = null;        //Used to remember the node at the beginning of a word, depth 0
 
+      //Either create root or add head to existing level
       if(root==null){
          root = new trieNode(word.charAt(0), 0);
          head = root;
@@ -97,6 +112,7 @@ public class trieController{
       trieNode spot = parent.getChild();
       trieNode sibling = null;
 
+      //Find the spot where the char should be inserted
       while(spot.getData() < data && spot.getRight() != null){
          spot = spot.getRight();
       }
@@ -131,6 +147,8 @@ public class trieController{
    -------------------------------------------------------------------------------------------------------
    */
    public void spellCheck(String word){
+      long startTime = System.nanoTime();       //Time found is saved in nanoseconds
+      timesChecked++;
 
       String endWord = word+'$';        //Append the end word character
       trieNode spot = root;
@@ -149,10 +167,32 @@ public class trieController{
             break;
       }
 
-      if(found==true)
-         System.out.print(""/*word + " is correctly spelled"*/);
-      else
+      long endTime = System.nanoTime();
+      avgDepth+= (spot.getDepth());
+
+      //Saving statistics for the word search
+      if(found==true){
+         System.out.println(word + " is correctly spelled");
+         avgTimeFound += (endTime - startTime);
+         foundCount++;
+      }
+      else{
          System.out.println(word + " is incorrectly spelled");
+         avgTimeNotFound += (endTime - startTime);
+         notFoundCount++;
+      }
+   }
+
+   /*
+   -------------------------------------------------------------------------------------------------------
+   STATISTICS
+   -------------------------------------------------------------------------------------------------------
+   */
+   public void printStats(){
+      System.out.println("Average time when the word is found: " + avgTimeFound/foundCount + " nanoseconds");
+      System.out.println("Average time when the word is not found: " + avgTimeNotFound/notFoundCount + " nanoseconds");
+      System.out.println("Average depth of the word is: " + avgDepth/timesChecked);
+      System.out.println("Approximately "+ (int)(((float)foundCount/(float)timesChecked)*100) + "% of words in this file are correct.");
    }
 
 }
