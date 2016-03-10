@@ -28,8 +28,9 @@ public class trieController{
       else{
          char firstLetter = word.charAt(0);
          trieNode spot = root;
-         while(spot.getData() < firstLetter && spot.getRight() != null)
+         while(spot.getData() < firstLetter && spot.getRight() != null){
             spot = spot.getRight();
+         }
 
          //Determines whether new node needs to be inserted, and where
          if(spot.getData()==firstLetter)
@@ -38,11 +39,13 @@ public class trieController{
             //Insert new node into list
             head = new trieNode(firstLetter, 0);
             head.insertLeft(spot.getLeft());
+            if(spot.getLeft()!=null){spot.getLeft().insertRight(head);}
             spot.insertLeft(head);
             head.insertRight(spot);
             //If head is rightmost, it is root
-            if(head.getLeft() == null)
+            if(head.getLeft() == null){
                root = head;
+            }
          }
          else{
             //Insert new node into end of list
@@ -94,8 +97,9 @@ public class trieController{
       trieNode spot = parent.getChild();
       trieNode sibling = null;
 
-      while(spot.getData() < data && spot.getRight() != null)
+      while(spot.getData() < data && spot.getRight() != null){
          spot = spot.getRight();
+      }
 
       //Determines whether new node needs to be inserted, and where
       if(spot.getData()==data)
@@ -104,6 +108,7 @@ public class trieController{
          //Insert new node into list
          sibling = new trieNode(data, depth);
          sibling.insertLeft(spot.getLeft());
+         if(spot.getLeft()!=null){spot.getLeft().insertRight(sibling);}
          spot.insertLeft(sibling);
          sibling.insertRight(spot);
          //If new node is rightmost, it is direct child of parent
@@ -145,7 +150,7 @@ public class trieController{
       }
 
       if(found==true)
-         System.out.println(word + " is correctly spelled");
+         System.out.print(""/*word + " is correctly spelled"*/);
       else
          System.out.println(word + " is incorrectly spelled");
    }

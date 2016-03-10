@@ -38,7 +38,10 @@ public class as3{
          line = brs.readLine();
          while(line != null){
             //Spell Check all items
-            tc.spellCheck(line);
+            String[] words = line.split(" ");
+            for(String word : words){
+               tc.spellCheck(word);
+            }
             line = brs.readLine();
          }
 

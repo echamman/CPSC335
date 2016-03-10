@@ -1,7 +1,3 @@
-z's
-zebra
-Hai
-hai
-hey
-testing
-tested
+alpha
+mom
+dad
