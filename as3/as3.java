@@ -41,8 +41,10 @@ public class as3{
             String[] words = line.split(" ");
 
             //Removes special characters, essentially rendering each word as only the word, no spaces or characters
+            //Unfortunately I don't filter out periods due to some words actually containing a period and filtering them out would take a lot more work
+            //I also don't filter out [ or ] because it is part of the formatting for the replace function
             for(String word : words){
-               word = word.replaceAll("[-.:;(),\"?]","");
+               word = word.replaceAll("[-:;(),\"?]","");
                word = word.replaceAll("!","");
                word = word.toLowerCase();
                if(!word.equals(""))
