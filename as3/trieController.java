@@ -14,6 +14,7 @@ public class trieController{
    private int notFoundCount;
    private float avgDepth;
    private int timesChecked;
+   private int numKeys;
 
    public trieController(){
       root = null;
@@ -24,6 +25,7 @@ public class trieController{
       notFoundCount = 0;
       avgDepth = 0;
       timesChecked = 0;
+      numKeys = 0;
    }
 
    /*
@@ -33,6 +35,7 @@ public class trieController{
    */
    //Inserts a word into the trie
    public void insert(String word){
+      numKeys++;
       trieNode head = null;        //Used to remember the node at the beginning of a word, depth 0
 
       //Either create root or add head to existing level
@@ -189,10 +192,16 @@ public class trieController{
    -------------------------------------------------------------------------------------------------------
    */
    public void printStats(){
-      System.out.println("Average time when the word is found: " + avgTimeFound/foundCount + " nanoseconds");
-      System.out.println("Average time when the word is not found: " + avgTimeNotFound/notFoundCount + " nanoseconds");
+      if(foundCount>0)
+         System.out.println("Average time when the word is found: " + avgTimeFound/foundCount + " nanoseconds");
+      else
+         System.out.println("There are no correct words, so average time could not be found");
+      if(notFoundCount>0)
+         System.out.println("Average time when the word is not found: " + avgTimeNotFound/notFoundCount + " nanoseconds");
+      else
+         System.out.println("There are no incorrect words, so average time could not be found");
       System.out.println("Average depth of the word is: " + avgDepth/timesChecked);
-      System.out.println("Approximately "+ (int)(((float)foundCount/(float)timesChecked)*100) + "% of words in this file are correct.");
+      System.out.println("There are " + numKeys +  " keys in this trie");
    }
 
 }
