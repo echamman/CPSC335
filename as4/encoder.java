@@ -1,17 +1,20 @@
 /*
    Author: Ethan Hamman
    StudentID: 10125341
-   Encoder class
+   Collects all characters and handles their counts
+   Also encrypts words
 */
 
 public class encoder{
 
-   private probMap head;
+   private probNode head;
+   private huffmanTree root;
    private int charCount;
 
 
    public encoder(){
       head = null;
+      root = null;
       charCount=0;
 
    }
@@ -22,9 +25,9 @@ public class encoder{
    public void scan(String word){
       char c;
       if(head==null){
-         head = new probMap(word.charAt(0));
+         head = new probNode(word.charAt(0));
       }
-      probMap curr = head;
+      probNode curr = head;
 
       for(int i=0; i<word.length(); i++){
          c = word.charAt(i);
@@ -36,7 +39,7 @@ public class encoder{
             curr.inc();
          }
          else if(c<curr.getChar()){       //Insert into the list
-            probMap insert = new probMap(c, curr, curr.getPrev());
+            probNode insert = new probNode(c, curr, curr.getPrev());
             if(insert.getPrev()!=null)
                insert.getPrev().setNext(insert);
             curr.setPrev(insert);
@@ -44,8 +47,8 @@ public class encoder{
                head = insert;
             insert.inc();
          }
-         else{       //At the end of the list
-            probMap insert = new probMap(c, null, curr);
+         else{       //Insert at the end of the list
+            probNode insert = new probNode(c, null, curr);
             curr.setNext(insert);
             insert.inc();
          }
@@ -55,11 +58,15 @@ public class encoder{
 
    //Print probabilities for every character (Debugging)
    public void printProbs(){
-      probMap curr = head;
+      probNode curr = head;
       while(curr!=null){
          System.out.println(curr.getChar()+ ": "+curr.getProb(charCount));
          curr = curr.getNext();
       }
+   }
+
+   public void makeTree(){
+      return;
    }
 
    //Encodes a word using the probabilities

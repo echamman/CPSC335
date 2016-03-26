@@ -1,24 +1,24 @@
 /*
    Author: Ethan Hamman
    StudentID: 10125341
-   Simple object for a character and it's probability
+   Simple object for a character and it's probability, used only for inputting words
 */
 
-public class probMap{
+public class probNode{
 
    private char c;
    private int count;
-   private probMap next;
-   private probMap prev;
+   private probNode next;
+   private probNode prev;
 
-   public probMap(char c){
+   public probNode(char c){
       this.c = c;
       count = 0;
       next = null;
       prev = null;
    }
 
-   public probMap(char c, probMap next, probMap prev){
+   public probNode(char c, probNode next, probNode prev){
       this.c = c;
       count = 0;
       this.next = next;
@@ -37,19 +37,23 @@ public class probMap{
       return ((float)count)/((float)total);
    }
 
-   public void setNext(probMap next){
+   public int getCount(){
+      return count;
+   }
+
+   public void setNext(probNode next){
       this.next = next;
    }
 
-   public probMap getNext(){
+   public probNode getNext(){
       return next;
    }
 
-   public void setPrev(probMap prev){
+   public void setPrev(probNode prev){
       this.prev = prev;
    }
 
-   public probMap getPrev(){
+   public probNode getPrev(){
       return prev;
    }
 

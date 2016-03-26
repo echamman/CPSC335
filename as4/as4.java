@@ -1,7 +1,7 @@
 /*
    Author: Ethan Hamman
    StudentID: 10125341
-   Main class:
+   Main class: Scans words, calls functions from encoder
 */
 import java.io.*;
 
@@ -28,6 +28,8 @@ public class as4{
 
          brScan.close();
          er.printProbs();
+
+         er.makeTree();          //Create the tree based off the char's probabilities
 
          //This block encodes the words using the probabilities
          BufferedReader brEncode = new BufferedReader(new FileReader(args[0]));
