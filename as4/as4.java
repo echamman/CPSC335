@@ -14,18 +14,31 @@ public class as4{
          System.exit(0);
       }
 
-      try{
-         FileReader fr = new FileReader(/*file*/);
-         BufferedReader br = new BufferedReader(fr);
+      encoder er = new encoder();
 
-         String line = br.readLine();
+      try{
+         //This block scans the file and writes the probabilities of all characters
+         BufferedReader brScan = new BufferedReader(new FileReader(args[0]));
+
+         String line = brScan.readLine();
          while(line != null){
-            //Encode
+            er.scan(line.toLowerCase());
+            line = brScan.readLine();
          }
 
-         br.close();
-         fr.close();
+         brScan.close();
+         er.printProbs();
 
+         //This block encodes the words using the probabilities
+         BufferedReader brEncode = new BufferedReader(new FileReader(args[0]));
+
+         line = brEncode.readLine();
+         while(line != null){
+            //Encode
+            line = brEncode.readLine();
+         }
+
+         brEncode.close();
 
       }catch(IOException e){
          System.out.println("IOException: "+e);
