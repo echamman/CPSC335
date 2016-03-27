@@ -27,7 +27,6 @@ public class as4{
          }
 
          brScan.close();
-         er.printProbs();
 
          er.makeTree();          //Create the tree based off the char's probabilities
 
