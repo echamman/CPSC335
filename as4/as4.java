@@ -28,17 +28,19 @@ public class as4{
 
          brScan.close();
 
-         er.makeTree();          //Create the tree based off the char's probabilities
+         er.makeTree();          //Create the tree based off the char's stored probabilities
 
          //This block encodes the words using the probabilities
          BufferedReader brEncode = new BufferedReader(new FileReader(args[0]));
+         Writer wr = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UTF-8"));
 
          line = brEncode.readLine();
          while(line != null){
-            //Encode
+            wr.write(er.encode(line) + "\n");
             line = brEncode.readLine();
          }
-
+         
+         wr.close();
          brEncode.close();
 
       }catch(IOException e){
