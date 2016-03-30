@@ -107,11 +107,15 @@ public class encoder{
          left = trees[1];
          trees = shrinkArray(trees, right, left);
       }
-      int newCount = trees[0].getFreq() + trees[1].getFreq();
-      String newString = trees[0].getData().replace("*","") + "*" + trees[1].getData().replace("*","");
-      root = new huffmanTree(newString, newCount);     //Store the completed tree as root
-      root.setRight(trees[0]);
-      root.setLeft(trees[1]);
+      try{
+         int newCount = trees[0].getFreq() + trees[1].getFreq();
+         String newString = trees[0].getData().replace("*","") + "*" + trees[1].getData().replace("*","");
+         root = new huffmanTree(newString, newCount);     //Store the completed tree as root
+         root.setRight(trees[0]);
+         root.setLeft(trees[1]);
+      }catch(Exception e){
+         root = trees[0];
+      }
    }
 
    //Shrink trees array by removing lowest two counts, and adding a new "root" tree into the appropriately sorted spot
@@ -160,7 +164,7 @@ public class encoder{
                curr = curr.getLeft();
             }
             else{          //In case the character is not in the tree *shouldn't happen*
-               System.out.println("Character not in tree");
+               System.out.println("Character not in tree: " + c);
                System.exit(0);
             }
          }

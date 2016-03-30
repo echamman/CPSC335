@@ -22,6 +22,7 @@ public class as4{
 
          String line = brScan.readLine();
          while(line != null){
+            line = line.toLowerCase();
             er.scan(line.toLowerCase());
             line = brScan.readLine();
          }
@@ -36,10 +37,11 @@ public class as4{
 
          line = brEncode.readLine();
          while(line != null){
+            line = line.toLowerCase();
             wr.write(er.encode(line) + "\n");
             line = brEncode.readLine();
          }
-         
+
          wr.close();
          brEncode.close();
 
