@@ -34,6 +34,8 @@ public class as4{
          //This block encodes the words using the probabilities
          BufferedReader brEncode = new BufferedReader(new FileReader(args[0]));
          Writer wr = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UTF-8"));
+         //Using an array List for the bytes
+         ArrayList<byte> bytes = new ArrayList<byte>();
 
          line = brEncode.readLine();
          while(line != null){

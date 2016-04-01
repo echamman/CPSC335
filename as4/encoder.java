@@ -141,8 +141,8 @@ public class encoder{
    }
 
    //Encodes a word using the probabilities
-   public String encode(String word){
-      String encoded = "";
+   public byte[] encode(String word){
+      byte[] encoded = new byte[word.length];
       huffmanTree curr = null;
       String[] split = null;
 
@@ -151,16 +151,16 @@ public class encoder{
       for(int i = 0; i<word.length();i++)
          wordArray[i] = word.charAt(i);
 
-      for(char c: wordArray){
+      for(int i=word.length-1;i>=0;i--){
          curr = root;
          while(!curr.getData().equals(c+"")){
             split = curr.getData().split("\\*");
             if(split[0].contains(c+"")){
-               encoded+="0";
+               encoded[i]=0;
                curr = curr.getRight();
             }
             else if(split[1].contains(c+"")){
-               encoded+="1";
+               encoded[i]=1;
                curr = curr.getLeft();
             }
             else{          //In case the character is not in the tree *shouldn't happen*
