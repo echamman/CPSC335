@@ -2,6 +2,8 @@
    Author: Ethan Hamman
    StudentID: 10125341
    Collects all characters and handles their counts
+   Forms the priority queue
+   Forms the huffmanTree
    Also encrypts words
 */
 import java.util.*;
@@ -24,7 +26,7 @@ public class encoder{
       return uniqueChar;
    }
 
-   //Scans a word and increments the count for every character
+   //Scans a word and increments the count for every character in propNode
    public void scan(String word){
       char c;
       if(head==null){
@@ -61,16 +63,6 @@ public class encoder{
       }
    }
 
-   //Print probabilities for every character (Debugging)
-   public void printProbs(){
-      probNode curr = head;
-      while(curr!=null){
-         System.out.println(curr.getChar()+ ": "+curr.getProb(charCount));
-         curr = curr.getNext();
-      }
-   }
-
-
    //Returns a byte array containing symbol, nBits, and the bits, for every character
    public String[] encodings(){
       String chars = root.getData();
@@ -93,7 +85,7 @@ public class encoder{
       return toReturn.toArray(new String[0]);
    }
 
-   //Sorts nodes by probabilities, inserts them into the tree
+   //Sorts nodes by probabilities (priority queue), then inserts them into the tree
    //There must be nodes! This function does not error check for whether any words have been scanned()
    public void makeTree(){
       int numNodes = 1;             //Count number of nodes
@@ -148,7 +140,7 @@ public class encoder{
       }
    }
 
-   //Shrink trees array by removing lowest two counts, and adding a new "root" tree into the appropriately sorted spot
+   //Shrink trees array by removing lowest two counts of priority queue, and adding a new "root" tree into the appropriately sorted spot
    private huffmanTree[] shrinkArray(huffmanTree[] trees, huffmanTree right, huffmanTree left){
       int newCount = right.getFreq() + left.getFreq();
       String newString = right.getData().replace("*","") + "*" + left.getData().replace("*","");
@@ -169,36 +161,6 @@ public class encoder{
       }
       return tempTrees;
    }
-
-   /*Encodes a word using the tree
-   public byte[] encode(String word){
-      byte[] encoded = new byte[0];
-      byte[] tempEncoded;
-      byte[] charCodes;
-      huffmanTree curr = null;
-      String[] split = null;
-
-      char[] wordArray = new char[word.length()];
-
-      for(int i = 0; i<word.length();i++)
-         wordArray[i] = word.charAt(i);
-
-      for(char c: wordArray){
-         charCodes = charCode(c);
-         tempEncoded = new byte[encoded.length + charCodes.length-1];
-         for(int i=0; i<encoded.length;i++){
-            tempEncoded[i] = encoded[i];
-         }
-         int k=1;
-         for(int j=encoded.length;j<tempEncoded.length;j++){
-            tempEncoded[j] = charCodes[k];
-            k++;
-         }
-         encoded = tempEncoded;
-      }
-
-      return encoded;
-   }*/
 
    //Encodes a word using the tree
    public String encode(String word){
@@ -230,7 +192,7 @@ public class encoder{
       return code;
    }
 
-   //Returns a byte[] consisting of [nBits, bits]
+   //Returns a String consisting of [nBits, bits] for a given character using the tree
    private String charCode(char c){
       huffmanTree curr = root;
       String code = "";
