@@ -31,9 +31,11 @@ public class as4{
          brScan.close();
 
          er.makeTree();          //Create the tree based off the char's stored probabilities
-         String symbols = er.encodings();  //Create a String containing the Symbol, nBits, and bits for each character
-
+         String[] symbols = er.encodings();  //Create a String containing the Symbol, nBits, and bits for each character
          //This block encodes the words using the probabilities
+         for(int i = 0;i<symbols.length;i++){
+            System.out.println(symbols[i]);
+         }
          BufferedReader brEncode = new BufferedReader(new FileReader(args[0]));
 
 
@@ -60,13 +62,16 @@ public class as4{
          leOut.writeBytes("C335");
          leOut.write(er.getNumChars());
          leOut.write(nDataBits);
-         while(!(symbols.equals(""))){     //Parse through symbols until empty
-            leOut.writeChar(symbols.charAt(0));    //Write character
-            leOut.write(Integer.parseInt(""+symbols.charAt(1)));  //Write number of bits it has
-            symbols=symbols.substring(2);
-            String bits = symbols.substring(0,8);
-            symbols=symbols.substring(8);
-            leOut.write(Byte.parseByte(bits,2));      //Write bits for symbol in hex
+         int counter = 0;
+         while(counter<symbols.length){     //Parse through symbols until empty
+            leOut.writeBytes(symbols[counter++]);    //Write character
+            leOut.write(Integer.parseInt(symbols[counter++]+"")); //Write number of bits it has
+            int numLoops = symbols[counter].length()/8;
+            String bits = symbols[counter++];
+            for(int i=0; i<numLoops;i++){                             //If a symbol has more than 8 bits of code, loop
+               leOut.write((byte)(Integer.parseInt(bits.substring(0,8),2)));      //Write bits for symbol as int, cast as byte
+               bits = bits.substring(8);
+            }
 
          }
 
@@ -78,9 +83,9 @@ public class as4{
             for(int i=0;i<addBits;i++){      //Adding extra zeroes if the word doesn't fill n bytes
                code+="0";
             }
-            while(!(code.equals(""))){          //Write out bits 8 at a time in hex
+            while(!(code.equals(""))){          //Write out bits 8 at a time
                String temp = code.substring(0,8);
-               byte toWrite = Byte.parseByte(temp, 2);
+               byte toWrite = ((byte)Integer.parseInt(temp, 2));
                leOut.write(toWrite);
                code = code.substring(8);
             }

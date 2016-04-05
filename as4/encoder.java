@@ -72,24 +72,25 @@ public class encoder{
 
 
    //Returns a byte array containing symbol, nBits, and the bits, for every character
-   public String encodings(){
+   public String[] encodings(){
       String chars = root.getData();
       chars = chars.replaceAll("\\*","");
-      String toReturn = "";
+      ArrayList<String> toReturn = new ArrayList<String>();
       char c;
+      int count = 0;
 
       for(int i=0; i<chars.length();i++){
          c=chars.charAt(i);
          String encoding = charCode(c);
-         toReturn+=""+c;
-         toReturn+=""+encoding.length();
+         toReturn.add(c+"");
+         toReturn.add(encoding.length()+"");
          int addBits = 8-(encoding.length()%8);
          for(int j=0;j<addBits;j++){
             encoding+="0";
          }
-         toReturn+=encoding;        //Encoding will be "'c''nBits''bits'" toReturn is this repeated for every char c, bits will always be of length 8
+         toReturn.add(encoding);        //Encoding will be "'c''nBits''bits'" toReturn is this repeated for every char c, bits will always be of length 8
       }
-      return toReturn;
+      return toReturn.toArray(new String[0]);
    }
 
    //Sorts nodes by probabilities, inserts them into the tree
@@ -225,7 +226,6 @@ public class encoder{
                System.exit(0);
             }
          }
-         System.out.println(code);
       }
       return code;
    }
