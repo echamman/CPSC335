@@ -4,20 +4,25 @@
    Collects all characters and handles their counts
    Also encrypts words
 */
+import java.util.*;
 
 public class encoder{
 
    private probNode head;
    private huffmanTree root;
    private int charCount;
+   private int uniqueChar;
 
    public encoder(){
       head = null;
       root = null;
       charCount=0;
+      uniqueChar=0;
    }
 
-
+   public int getNumChars(){
+      return uniqueChar;
+   }
 
    //Scans a word and increments the count for every character
    public void scan(String word){
@@ -44,11 +49,13 @@ public class encoder{
             if(insert.getPrev()==null)
                head = insert;
             insert.inc();
+            uniqueChar++;
          }
          else{       //Insert at the end of the list
             probNode insert = new probNode(c, null, curr);
             curr.setNext(insert);
             insert.inc();
+            uniqueChar++;
          }
          charCount++;
       }
@@ -61,6 +68,28 @@ public class encoder{
          System.out.println(curr.getChar()+ ": "+curr.getProb(charCount));
          curr = curr.getNext();
       }
+   }
+
+
+   //Returns a byte array containing symbol, nBits, and the bits, for every character
+   public String encodings(){
+      String chars = root.getData();
+      chars = chars.replaceAll("\\*","");
+      String toReturn = "";
+      char c;
+
+      for(int i=0; i<chars.length();i++){
+         c=chars.charAt(i);
+         String encoding = charCode(c);
+         toReturn+=""+c;
+         toReturn+=""+encoding.length();
+         int addBits = 8-(encoding.length()%8);
+         for(int j=0;j<addBits;j++){
+            encoding+="0";
+         }
+         toReturn+=encoding;        //Encoding will be "'c''nBits''bits'" toReturn is this repeated for every char c, bits will always be of length 8
+      }
+      return toReturn;
    }
 
    //Sorts nodes by probabilities, inserts them into the tree
@@ -140,9 +169,11 @@ public class encoder{
       return tempTrees;
    }
 
-   //Encodes a word using the probabilities
+   /*Encodes a word using the tree
    public byte[] encode(String word){
-      byte[] encoded = new byte[word.length];
+      byte[] encoded = new byte[0];
+      byte[] tempEncoded;
+      byte[] charCodes;
       huffmanTree curr = null;
       String[] split = null;
 
@@ -151,25 +182,74 @@ public class encoder{
       for(int i = 0; i<word.length();i++)
          wordArray[i] = word.charAt(i);
 
-      for(int i=word.length-1;i>=0;i--){
-         curr = root;
-         while(!curr.getData().equals(c+"")){
-            split = curr.getData().split("\\*");
-            if(split[0].contains(c+"")){
-               encoded[i]=0;
-               curr = curr.getRight();
-            }
-            else if(split[1].contains(c+"")){
-               encoded[i]=1;
-               curr = curr.getLeft();
-            }
-            else{          //In case the character is not in the tree *shouldn't happen*
-               System.out.println("Character not in tree: " + c);
-               System.exit(0);
-            }
+      for(char c: wordArray){
+         charCodes = charCode(c);
+         tempEncoded = new byte[encoded.length + charCodes.length-1];
+         for(int i=0; i<encoded.length;i++){
+            tempEncoded[i] = encoded[i];
          }
+         int k=1;
+         for(int j=encoded.length;j<tempEncoded.length;j++){
+            tempEncoded[j] = charCodes[k];
+            k++;
+         }
+         encoded = tempEncoded;
       }
 
       return encoded;
+   }*/
+
+   //Encodes a word using the tree
+   public String encode(String word){
+      huffmanTree curr = null;
+      String[] split = null;
+      String code ="";
+
+      char[] wordArray = new char[word.length()];
+
+      for(int i = 0; i<word.length();i++){
+         curr = root;
+         char c = word.charAt(i);
+         while(!curr.getData().equals(c+"")){
+            split = curr.getData().split("\\*");
+            if(split[0].contains(c+"")){
+               code+='0';
+               curr = curr.getRight();
+            }
+            else if(split[1].contains(c+"")){
+               code+='1';
+               curr = curr.getLeft();
+            }
+            else{          //In case the character is not in the tree *shouldn't happen*
+               System.out.println("Character not in tree encode: " + c);
+               System.exit(0);
+            }
+         }
+         System.out.println(code);
+      }
+      return code;
+   }
+
+   //Returns a byte[] consisting of [nBits, bits]
+   private String charCode(char c){
+      huffmanTree curr = root;
+      String code = "";
+      String[] split;
+      while(!curr.getData().equals(c+"")){
+         split = curr.getData().split("\\*");
+         if(split[0].contains(c+"")){
+            code+='0';
+            curr = curr.getRight();
+         }
+         else if(split[1].contains(c+"")){
+            code+='1';
+            curr = curr.getLeft();
+         }
+         else{          //In case the character is not in the tree *shouldn't happen*
+            System.out.println("Character not in tree charCode: " + c);
+            System.exit(0);
+         }
+      }
+      return code;
    }
 }

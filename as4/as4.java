@@ -4,6 +4,7 @@
    Main class: Scans words, calls functions from encoder
 */
 import java.io.*;
+import java.util.*;
 
 public class as4{
 
@@ -30,25 +31,67 @@ public class as4{
          brScan.close();
 
          er.makeTree();          //Create the tree based off the char's stored probabilities
+         String symbols = er.encodings();  //Create a String containing the Symbol, nBits, and bits for each character
 
          //This block encodes the words using the probabilities
          BufferedReader brEncode = new BufferedReader(new FileReader(args[0]));
-         Writer wr = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UTF-8"));
-         //Using an array List for the bytes
-         ArrayList<byte> bytes = new ArrayList<byte>();
+
+
+         //This inputs all encoded words into one big byte array so I know how many data bits I'll put into the header
+         String code = "";
 
          line = brEncode.readLine();
          while(line != null){
             line = line.toLowerCase();
-            wr.write(er.encode(line) + "\n");
+            code+=er.encode(line);
+            int addBits = 8-(code.length()%8);
+            for(int i=0;i<addBits;i++){      //Adding extra zeroes if the word doesn't fill n bytes
+               code+="0";
+            }
             line = brEncode.readLine();
          }
-
-         wr.close();
+         int nDataBits = code.length();
          brEncode.close();
 
+         brEncode = new BufferedReader(new FileReader(args[0]));
+         DataOutputStream out = new DataOutputStream(new FileOutputStream("out.txt"));
+         LEDataOutputStream leOut = new LEDataOutputStream(out);
+
+         leOut.writeBytes("C335");
+         leOut.write(er.getNumChars());
+         leOut.write(nDataBits);
+         while(!(symbols.equals(""))){     //Parse through symbols until empty
+            leOut.writeChar(symbols.charAt(0));    //Write character
+            leOut.write(Integer.parseInt(""+symbols.charAt(1)));  //Write number of bits it has
+            symbols=symbols.substring(2);
+            String bits = symbols.substring(0,8);
+            symbols=symbols.substring(8);
+            leOut.write(Byte.parseByte(bits,2));      //Write bits for symbol in hex
+
+         }
+
+         line = brEncode.readLine();
+         while(line != null){
+            line = line.toLowerCase();
+            code = er.encode(line);
+            int addBits = 8-(code.length()%8);
+            for(int i=0;i<addBits;i++){      //Adding extra zeroes if the word doesn't fill n bytes
+               code+="0";
+            }
+            while(!(code.equals(""))){          //Write out bits 8 at a time in hex
+               String temp = code.substring(0,8);
+               byte toWrite = Byte.parseByte(temp, 2);
+               leOut.write(toWrite);
+               code = code.substring(8);
+            }
+            line = brEncode.readLine();
+         }
+         brEncode.close();
+         out.close();
+         leOut.close();
+
       }catch(IOException e){
-         System.out.println("IOException: "+e);
+         e.printStackTrace();
          System.exit(0);
       }
 
